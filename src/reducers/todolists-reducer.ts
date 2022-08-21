@@ -17,6 +17,7 @@ export type ChangeTodoListTitleAT = {
     id: string
     title: string
 }
+
 export type ChangeTodoListFilterAT = {
     type: "CHANGE-TODOLIST-FILTER"
     id: string
