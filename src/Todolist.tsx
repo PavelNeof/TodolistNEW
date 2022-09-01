@@ -17,7 +17,7 @@ export type TaskType = {
 type TodoListPropsType = {
     todoListId: string
     title: string
-    tasks: TaskType[]
+    tasks: Array<TaskType>
     filter: FilterValuesType
     addTask: (title: string, todoListId: string) => void
     removeTask: (taskID: string, todoListId: string) => void
@@ -31,87 +31,76 @@ type TodoListPropsType = {
 const TodoList = memo((props: TodoListPropsType) => {
 
     console.log('todolist')
-    /*let tasksForRender;
-    switch (tl.filter) {
-        case "completed":
-            tasksForRender = tasks[tl.id].filter(t => t.isDone === true)
-            break
-        case "active":
-            tasksForRender = tasks[tl.id].filter(t => t.isDone === false)
-            break
-        default:
-            tasksForRender = tasks[tl.id]
-    }*/
 
-    let tasks = props.tasks;
+
+    const removeTask = useCallback((taskId: string) => props.removeTask(taskId, props.todoListId), [props.removeTask, props.todoListId])
+
+    const changeTaskStatus = useCallback((taskId: string, newTaskStatus: boolean) => {
+        props.changeTaskStatus(taskId, newTaskStatus, props.todoListId);
+    }, [props.changeTaskStatus, props.todoListId])
+
+    const changeTaskTitle = useCallback((taskId: string, newTaskTitle: string) => {
+        props.changeTaskTitle(taskId, newTaskTitle, props.todoListId);
+    }, [props.changeTaskTitle, props.todoListId])
+
+   /* let tasks = props.tasks;
 
     if (props.filter === "active") {
         tasks = tasks.filter(t => t.isDone === false);
     }
     if (props.filter === "completed") {
         tasks = tasks.filter(t => t.isDone === true);
-    }
-
-    //const removeTask = (taskId:string) => props.removeTask(taskId, props.todoListId)
-    const removeTask = useCallback((taskId: string) => props.removeTask(taskId, props.todoListId), [props.removeTask, props.todoListId])
-    //const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) =>
-    //    props.changeTaskStatus(task.id, e.currentTarget.checked, props.todoListId)
-    const changeTaskStatus = useCallback((taskId: string, newTaskStatus: boolean) => {
-        props.changeTaskStatus(taskId, newTaskStatus, props.todoListId);
-    }, [props.changeTaskStatus, props.todoListId])
-
-    //const onChangeTitleHandler = (title: string) => {
-    //    props.changeTaskTitle(task.id, title, props.todoListId)
-   // }
-    const changeTaskTitle = useCallback((taskId: string, newTaskTitle: string) => {
-        props.changeTaskTitle(taskId, newTaskTitle, props.todoListId);
-    }, [props.changeTaskTitle, props.todoListId])
-
-
+    }*/
+       let tasks= props.tasks;
+   switch (props.filter) {
+       case "completed":
+           tasks = tasks.filter(t => t.isDone === true)
+           break
+       case "active":
+           tasks = tasks.filter(t => t.isDone === false)
+           break
+       default:
+           tasks = tasks
+   }
     const tasksListItems = props.tasks.length
-        ? props.tasks.map(task => {
+        ? tasks.map(task => {
 
             return (
-<Task key={task.id}
-      task = {task}
-      removeTask={removeTask}
-      changeTaskStatus={changeTaskStatus}
-      changeTaskTitle={changeTaskTitle}/>
+                <Task key={task.id}
+                      task={task}
+                      removeTask={removeTask}
+                      changeTaskStatus={changeTaskStatus}
+                      changeTaskTitle={changeTaskTitle}/>
 
-               /* <li key={task.id} className={task.isDone ? "isDone" : ""}>
-                    {/!*<input
-                        onChange={changeTaskStatus}
-                        type="checkbox" checked={task.isDone}
-                    />*!/}
-                    <FormControlLabel
-                        control={<Checkbox
-                            value="checkedA"
-                            onChange={changeTaskStatus} checked={task.isDone}
-                            inputProps={{'aria-label': 'Checkbox A'}}
-                            icon={<FavoriteBorder/>} checkedIcon={<Favorite/>} name="checkedH"
-                        />}
-                        label=""
-                    />
+                /* <li key={task.id} className={task.isDone ? "isDone" : ""}>
+                     {/!*<input
+                         onChange={changeTaskStatus}
+                         type="checkbox" checked={task.isDone}
+                     />*!/}
+                     <FormControlLabel
+                         control={<Checkbox
+                             value="checkedA"
+                             onChange={changeTaskStatus} checked={task.isDone}
+                             inputProps={{'aria-label': 'Checkbox A'}}
+                             icon={<FavoriteBorder/>} checkedIcon={<Favorite/>} name="checkedH"
+                         />}
+                         label=""
+                     />
 
-                    {/!*<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="checkedH" />*!/}
+                     {/!*<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="checkedH" />*!/}
 
-                    {/!*<button onClick={removeTask}>x</button>*!/}
+                     {/!*<button onClick={removeTask}>x</button>*!/}
 
-                    <EditableSpan title={task.title} changeTitle={onChangeTitleHandler}/>
-                    <IconButton
-                        aria-label="delete"
-                        onClick={removeTask}>
-                        <HighlightOffIcon/>
-                    </IconButton>
-                </li>*/
+                     <EditableSpan title={task.title} changeTitle={onChangeTitleHandler}/>
+                     <IconButton
+                         aria-label="delete"
+                         onClick={removeTask}>
+                         <HighlightOffIcon/>
+                     </IconButton>
+                 </li>*/
             )
         })
         : <span>Your taskList is empty</span>
-
-
-    const getChangeFilterHandler = (filter: FilterValuesType) => {
-        return () => props.changeFilter(filter, props.todoListId)
-    }
 
 
     const removeTodoList = () => {
@@ -120,17 +109,20 @@ const TodoList = memo((props: TodoListPropsType) => {
 
     const addTask = useCallback((title: string) => {
         props.addTask(title, props.todoListId)
-    },[props.addTask,props.todoListId]);
+    }, [props.addTask, props.todoListId]);
     const changeTodolistTitle = (title: string) => {
         props.changeTodolistTitle(title, props.todoListId)
     }
 
     const btnColor = {color: "#78909c"};
 
+    const getChangeFilterHandler = (filter: FilterValuesType) => {
+        return () => props.changeFilter(filter, props.todoListId)
+    }
 
-
-
-
+/*    const onAllClickHandler = () => props.changeFilter("all", props.todoListId);
+    const onActiveClickHandler = () => props.changeFilter("active", props.todoListId);
+    const onCompletedClickHandler = () => props.changeFilter("completed", props.todoListId);*/
 
 
     return (
