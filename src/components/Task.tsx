@@ -33,19 +33,6 @@ export const Task = memo(({
         changeTaskTitle(task.id, newValue);
     }
 
-    /* return <div key={task.id} className={task.isDone ? "is-done" : ""}>
-     <Checkbox
-         checked={task.isDone}
-     color="primary"
-     onChange={onChangeHandler}
-     />
-
-     <EditableSpan value={task.title} onChange={onTitleChangeHandler}/>
-     <IconButton onClick={onClickHandler}>
-         <Delete/>
-         </IconButton>
-         </div>
- }*/
 
 return <li key={task.id} className={task.isDone ? "isDone" : ""}>
 

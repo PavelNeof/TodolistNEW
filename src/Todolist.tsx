@@ -43,14 +43,7 @@ const TodoList = memo((props: TodoListPropsType) => {
         props.changeTaskTitle(taskId, newTaskTitle, props.todoListId);
     }, [props.changeTaskTitle, props.todoListId])
 
-   /* let tasks = props.tasks;
 
-    if (props.filter === "active") {
-        tasks = tasks.filter(t => t.isDone === false);
-    }
-    if (props.filter === "completed") {
-        tasks = tasks.filter(t => t.isDone === true);
-    }*/
        let tasks= props.tasks;
    switch (props.filter) {
        case "completed":
@@ -72,32 +65,6 @@ const TodoList = memo((props: TodoListPropsType) => {
                       changeTaskStatus={changeTaskStatus}
                       changeTaskTitle={changeTaskTitle}/>
 
-                /* <li key={task.id} className={task.isDone ? "isDone" : ""}>
-                     {/!*<input
-                         onChange={changeTaskStatus}
-                         type="checkbox" checked={task.isDone}
-                     />*!/}
-                     <FormControlLabel
-                         control={<Checkbox
-                             value="checkedA"
-                             onChange={changeTaskStatus} checked={task.isDone}
-                             inputProps={{'aria-label': 'Checkbox A'}}
-                             icon={<FavoriteBorder/>} checkedIcon={<Favorite/>} name="checkedH"
-                         />}
-                         label=""
-                     />
-
-                     {/!*<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="checkedH" />*!/}
-
-                     {/!*<button onClick={removeTask}>x</button>*!/}
-
-                     <EditableSpan title={task.title} changeTitle={onChangeTitleHandler}/>
-                     <IconButton
-                         aria-label="delete"
-                         onClick={removeTask}>
-                         <HighlightOffIcon/>
-                     </IconButton>
-                 </li>*/
             )
         })
         : <span>Your taskList is empty</span>
