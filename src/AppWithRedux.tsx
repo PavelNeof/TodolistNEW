@@ -15,6 +15,7 @@ import {
 import {addTaskAC, changeTaskStatusAC, changeTitleStatusAC, removeTaskAC, tasksReducer} from "./reducers/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./reducers/store";
+import {RequestStatusType} from "./reducers/app-reducer";
 // CRUD => СRUD
 // GUI & CLI
 export type FilterValuesType = "all" | "active" | "completed"
@@ -32,34 +33,8 @@ export type TaskStateType = {
 
 function AppWithRedux() {
 
-    // BLL:
-// todolists:
-/*    const todoListId_1 = v1()
-    const todoListId_2 = v1()*/
 
-
-    /*const [todoLists, dispatchToTodoLists] = useReducer(
-        todolistsReducer, [
-            {id: todoListId_1, title: "What to learn", filter: "all"},
-            {id: todoListId_2, title: "What to buy", filter: "all"},
-        ]
-    )*/
-
-
-   /* const [tasks, dispatchToTasks] = useReducer(tasksReducer, {
-        [todoListId_1]: [
-            {id: v1(), title: "HTML", isDone: true},
-            {id: v1(), title: "CSS", isDone: true},
-            {id: v1(), title: "JS/ES6", isDone: false},
-        ],
-        [todoListId_2]: [
-            {id: v1(), title: "Bread", isDone: true},
-            {id: v1(), title: "Milk", isDone: true},
-            {id: v1(), title: "Meat", isDone: false},
-        ],
-    })*/
-
-
+    const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
     let todoLists = useSelector<AppRootStateType, Array<TodoListType>>(state => state.todolists)
     let tasks = useSelector<AppRootStateType, TaskStateType>(state => state.tasks)
 
