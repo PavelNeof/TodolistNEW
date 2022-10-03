@@ -1,6 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, memo, useState} from "react";
-import AddBoxIcon from '@material-ui/icons/AddBox';
-import {IconButton, TextField} from "@material-ui/core";
+import {IconButton, TextField} from "@mui/material";
+
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
@@ -62,7 +62,7 @@ export const AddItemForm = memo((props: AddItemFormPropsType) => {
                 size = {"medium"}
                 style = {{color:"#f06292"}}
                 aria-label="delete">
-                <AddBoxIcon />
+            {/*    <AddBoxIcon />*/}
             </IconButton>
             {/*{error && <div style={errorMessageStyles}>Title is required!</div>}*/}
         </div>

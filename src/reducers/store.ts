@@ -1,8 +1,9 @@
 import {tasksReducer} from './tasks-reducer';
 import {todolistsReducer} from './todolists-reducer';
-import {applyMiddleware, combineReducers, compose, legacy_createStore} from 'redux';
+import {Action, applyMiddleware, combineReducers, compose, legacy_createStore} from 'redux';
 import {appReducer} from "./app-reducer";
-import thunkMiddleware from 'redux-thunk'
+import thunkMiddleware, {ThunkDispatch} from 'redux-thunk'
+import {useDispatch} from "react-redux";
 
 /*
 declare global {
@@ -24,6 +25,8 @@ const rootReducer = combineReducers({
 })
 // непосредственно создаём store
 export const store = legacy_createStore(rootReducer, /*composeEnhancers(),*/applyMiddleware(thunkMiddleware));
+
+export const useAppDispatch = () => useDispatch<ThunkDispatch<AppRootStateType, unknown, Action>>()
 
 // определить автоматически тип всего объекта состояния
 export type AppRootStateType = ReturnType<typeof rootReducer>

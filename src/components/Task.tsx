@@ -1,56 +1,51 @@
-import React, {ChangeEvent, memo} from "react";
-import {TaskType} from "../Todolist";
-import {Checkbox, FormControlLabel, IconButton} from "@material-ui/core";
-import {Delete, Favorite, FavoriteBorder} from "@material-ui/icons";
+import React, {ChangeEvent, memo, useCallback} from "react";
+
+
 import {EditableSpan} from "../EditableSpan";
-import HighlightOffIcon from "@material-ui/icons/HighlightOff";
+
+import {TaskStatuses} from "../api/Types-api";
+import {TaskType} from "../api/todolist-api";
+import {Checkbox, FormControlLabel, IconButton} from "@mui/material";
 
 type TaskPropsType = {
     task: TaskType
-    removeTask: (taskID: string) => void
-    changeTaskStatus: (taskID: string, isDone: boolean ) => void
-    changeTaskTitle: (taskID: string, title: string ) => void
-
+    todolistId: string
+    changeTaskStatus: (id: string, status: TaskStatuses, todolistId: string) => void
+    changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
+    removeTask: (taskId: string, todolistId: string) => void
 }
+export const Task = React.memo((props: TaskPropsType) => {
+    const onClickHandler = useCallback(() => props.removeTask(props.task.id, props.todolistId), [props.task.id, props.todolistId]);
+
+    const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        let newIsDoneValue = e.currentTarget.checked
+        props.changeTaskStatus(props.task.id, newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New, props.todolistId)
+    }, [props.task.id, props.todolistId]);
+
+    const onTitleChangeHandler = useCallback((newValue: string) => {
+        props.changeTaskTitle(props.task.id, newValue, props.todolistId)
+    }, [props.task.id, props.todolistId]);
 
 
-export const Task = memo(({
-                         task,
-                         removeTask,
-                         changeTaskTitle,
-                         changeTaskStatus,
-
-                     }: TaskPropsType) => {
-
-    console.log('task')
-
-    const onClickHandler = () => removeTask(task.id)
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        let newIsDoneValue = e.currentTarget.checked;
-        changeTaskStatus(task.id, newIsDoneValue);
-    }
-    const onTitleChangeHandler = (newValue: string) => {
-        changeTaskTitle(task.id, newValue);
-    }
-
-
-return <li key={task.id} className={task.isDone ? "isDone" : ""}>
+return <div key={props.task.id} className={props.task.status === TaskStatuses.Completed ? 'is-done' : ''}>
 
     <FormControlLabel
         control={<Checkbox
             value="checkedA"
-            onChange={onChangeHandler} checked={task.isDone}
+            onChange={onChangeHandler}
+            checked={props.task.status === TaskStatuses.Completed}
             inputProps={{'aria-label': 'Checkbox A'}}
-            icon={<FavoriteBorder/>} checkedIcon={<Favorite/>} name="checkedH"
+           /* icon={<FavoriteBorder/>} checkedIcon={<Favorite/>} */
+            name="checkedH"
         />}
         label=""
     />
 
-    <EditableSpan title={task.title} changeTitle={onTitleChangeHandler}/>
+    <EditableSpan title={props.task.title} changeTitle={onTitleChangeHandler}/>
     <IconButton
         aria-label="delete"
         onClick={onClickHandler}>
-        <HighlightOffIcon/>
+      {/*  <HighlightOffIcon/>*/}
     </IconButton>
-        </li>
+        </div>
 })
